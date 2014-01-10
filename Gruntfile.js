@@ -71,8 +71,42 @@ module.exports = function (grunt) {
           base: [
             '.tmp',
             '<%= yeoman.app %>'
-          ]
-        }
+          ],
+          middleware: function (connect, options) {
+            var middlewares = [];
+            var directory = options.directory || options.base[options.base.length - 1];
+            if (!Array.isArray(options.base)) {
+              options.base = [options.base];
+            }
+            // Setup the proxy
+            middlewares.push(require('grunt-connect-proxy/lib/utils').proxyRequest);
+
+            options.base.forEach(function(base) {
+              // Serve static files.
+              middlewares.push(connect.static(base));
+            });
+
+            // Make directory browse-able.
+            middlewares.push(connect.directory(directory));
+
+            return middlewares;
+          }
+        },
+        proxies: [{
+          context: '/api',
+          host: 'api.steampowered.com',
+          changeOrigin: true,
+          rewrite: {
+            '^/api': ''
+          }
+        },{
+          context: '/id_api',
+          host: 'steamcommunity.com',
+          changeOrigin: true,
+          rewrite: {
+            '^/id_api': ''
+          }
+        }]
       },
       test: {
         options: {
@@ -363,6 +397,7 @@ module.exports = function (grunt) {
       'bower-install',
       'concurrent:server',
       'autoprefixer',
+      'configureProxies:livereload',
       'connect:livereload',
       'watch'
     ]);
@@ -403,4 +438,6 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  grunt.loadNpmTasks('grunt-connect-proxy');
 };
