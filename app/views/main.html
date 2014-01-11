@@ -1,6 +1,16 @@
 <textarea ng-model="userInputString"></textarea>
-<button ng-click="search()">Search</button>
+<button ng-click="search(userInputString)">Search</button>
 
-<p>{{users}}</p>
+<ul>
+	<li ng-repeat="user in users">
+		<a ng-href="http://steamcommunity.com/profiles/{{user.steamId}}">{{user.name}}</a>:
+			{{user.game_count}} games
+	</li>
+</ul>
 
-<p>{{games}}</p>
+<ul>
+	<li ng-repeat="game in games">
+		<img ng-src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_icon_url}}.jpg">
+		<a ng-href="http://steamcommunity.com/app/{{game.appid}}">{{game.name}}</a>
+	</li>
+</ul>

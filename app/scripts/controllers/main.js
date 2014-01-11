@@ -10,20 +10,22 @@ angular.module('steamGameMatcherApp')
       $scope.users[user.steamId] = user;
     };
 
-    $scope.search = function() {
+    $scope.search = function(userInputString) {
       $scope.users = {};
-      var userInputs = $scope.userInputString.split('\n');
+      var userInputs = userInputString.split('\n');
       for (var i in userInputs) {
         var userInput = userInputs[i];
         Steam.getSteamUser(userInput).then(addUser);
       }
     };
 
-    $scope.$watchCollection('users', function(users) {
-      var gameIdArrays = _.map(users, function(user) {
-        return user.gameIds;
-      });
-
-      $scope.games = _.intersection.apply({}, gameIdArrays);
-    });
+    $scope.$watch('users', function(users) {
+      console.log(users);
+      var gameIds = _.intersection.apply({}, _.map(users, function(user) {
+        return _.map(user.games, 'appid');
+      }));
+      var allGames = {};
+      angular.extend.apply({}, _.union([allGames], _.map(users, 'games')));
+      $scope.games = _.map(gameIds, function(gameId) {return allGames[gameId]});
+    }, true);
   });
