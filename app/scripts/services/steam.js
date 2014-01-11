@@ -1,3 +1,4 @@
+/* jshint camelcase: false */
 'use strict';
 
 angular.module('steamGameMatcherApp')
@@ -6,8 +7,7 @@ angular.module('steamGameMatcherApp')
   var API_KEY='5CDDD4FC0E7A510C4480B310391B8D67';
   var API_URL='/api/IPlayerService/GetOwnedGames/v0001/';
   var ID_API_URL='/id_api/';
-  var x2js = new X2JS();
-  var GAME_CACHE = {};
+  var xmlParser = new DOMParser();
 
   var addGames = function(steamUser) {
     $http.get(API_URL+'?key='+API_KEY+'&steamid='+steamUser.steamId+'&include_appinfo=1&format=json')
@@ -18,7 +18,7 @@ angular.module('steamGameMatcherApp')
         var game = gameData[i];
         games[game.appid] = game;
       }
-      steamUser.game_count = data.response.game_count;
+      steamUser.gameCount = data.response.game_count;
       steamUser.games = games;
     });
   };
@@ -34,11 +34,11 @@ angular.module('steamGameMatcherApp')
     $http.get(ID_API_URL + path + user + '?xml=1')
     .success(function (dataString) {
       try {
-        var data = x2js.xml_str2json(dataString);
-        deferred.resolve({steamId: data.profile.steamID64,
-                          name: data.profile.steamID.__cdata});
+        var xmlDoc = xmlParser.parseFromString(dataString, 'text/xml');
+        deferred.resolve({steamId: xmlDoc.getElementsByTagName('steamID64')[0].childNodes[0].nodeValue,
+                          name: xmlDoc.getElementsByTagName('steamID')[0].childNodes[0].nodeValue});
       } catch (e) {
-        console.log('Invalid user ' + user + e);
+        console.log('Invalid user ' + user);
         deferred.reject();
       }
     });

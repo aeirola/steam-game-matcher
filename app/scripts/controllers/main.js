@@ -20,12 +20,11 @@ angular.module('steamGameMatcherApp')
     };
 
     $scope.$watch('users', function(users) {
-      console.log(users);
       var gameIds = _.intersection.apply({}, _.map(users, function(user) {
         return _.map(user.games, 'appid');
       }));
       var allGames = {};
       angular.extend.apply({}, _.union([allGames], _.map(users, 'games')));
-      $scope.games = _.map(gameIds, function(gameId) {return allGames[gameId]});
+      $scope.games = _.map(gameIds, function(gameId) {return allGames[gameId];});
     }, true);
   });
