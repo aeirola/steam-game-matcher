@@ -1,10 +1,13 @@
 language: node_js
 node_js:
 - '0.10'
-before_script:
+install:
 - npm install -g bower grunt-cli
 - bower install
+script:
+- grunt
 deploy:
   provider: heroku
   api_key:
     secure: LkxQULTyFaql5mq/IM5nsxALWs/j+WUntNEa0+A3zlMq6wE2VnuJevo+13/ETgf+a+JZH+nbaVLrNL5qeoxXcyqdU7meM46qMA7Y6AblUsUeuptRGi+g63+K6UCCeucPdcVR2VclFTd8bG7OXdMceG6hW4nl9c1OrmFfq4c3uZ8=
+  skip_cleanup: true
