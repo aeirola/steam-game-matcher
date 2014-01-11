@@ -47,8 +47,6 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "grunt test",
-    "build": "grunt build",
-    "start": "node server/web.js"
+    "test": "grunt test"
   }
 }
