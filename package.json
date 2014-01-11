@@ -1,6 +1,11 @@
 {
   "name": "steamgamematcher",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "author": "Axel Eirola <axel.eirola@iki.fi>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aeirola/steam_game_matcher.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.2",
@@ -43,7 +48,7 @@
     "phantomjs": "~1.9.2"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.10.0"
   },
   "scripts": {
     "test": "grunt test"

@@ -1,0 +1,1 @@
+A tool for finding games that you and you friends all own.
