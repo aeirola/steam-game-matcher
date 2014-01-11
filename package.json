@@ -4,7 +4,7 @@
   "author": "Axel Eirola <axel.eirola@iki.fi>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aeirola/steam_game_matcher.git"
+    "url": "https://github.com/aeirola/steam-game-matcher.git"
   },
   "dependencies": {},
   "devDependencies": {
