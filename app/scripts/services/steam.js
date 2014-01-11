@@ -5,8 +5,9 @@ angular.module('steamGameMatcherApp')
 .service('Steam', function Steam($http, $q) {
   // AngularJS will instantiate a singleton by calling "new" on this function
   var API_KEY='5CDDD4FC0E7A510C4480B310391B8D67';
-  var API_URL='/api/IPlayerService/GetOwnedGames/v0001/';
+  var API_URL='/web_api/IPlayerService/GetOwnedGames/v0001/';
   var ID_API_URL='/id_api/';
+  var STORE_API_URL='/store_api/appdetails';
   var xmlParser = new DOMParser();
 
   var addGames = function(steamUser) {
@@ -14,13 +15,25 @@ angular.module('steamGameMatcherApp')
     .success(function (data) {
       var gameData = data.response.games;
       var games = {};
-      for (var i in gameData) {
-        var game = gameData[i];
+      _.forEach(gameData, function(game) {
         games[game.appid] = game;
-      }
+      });
+      expandGameData(games);
       steamUser.gameCount = data.response.game_count;
       steamUser.games = games;
     });
+  };
+
+  var expandGameData = function(games) {
+    var expand = function(data) {
+      for (var appid in data) {
+        angular.extend(games[appid], data[appid].data);
+      }
+    };
+
+    for (var appid in games) {
+      $http.get(STORE_API_URL+'?appids='+appid).success(expand);
+    }
   };
 
   var getSteamId = function(user) {

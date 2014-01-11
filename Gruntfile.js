@@ -93,11 +93,18 @@ module.exports = function (grunt) {
           }
         },
         proxies: [{
-          context: '/api',
+          context: '/web_api',
           host: 'api.steampowered.com',
           changeOrigin: true,
           rewrite: {
-            '^/api': ''
+            '^/web_api': ''
+          }
+        },{
+          context: '/store_api',
+          host: 'store.steampowered.com',
+          changeOrigin: true,
+          rewrite: {
+            '^/store_api': '/api'
           }
         },{
           context: '/id_api',
