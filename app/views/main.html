@@ -13,5 +13,6 @@
 		<img ng-if="game.img_icon_url" ng-src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_icon_url}}.jpg">
 		<a ng-href="http://steamcommunity.com/app/{{game.appid}}">{{game.name}}</a>
 		{{game.metacritic.score}}
+		{{game.categories.1.description}}
 	</li>
 </ul>

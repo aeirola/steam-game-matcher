@@ -12,6 +12,17 @@ angular.module('steamGameMatcherApp')
   var xmlParser = new DOMParser();
   var appCache = {}; // id -> promise
 
+  var convertCategories = function(appData) {
+    var convertedCategories = {};
+    console.log(appData);
+    _.forEach(appData.categories, function(category) {
+      convertedCategories[category.id] = category;
+    });
+
+    appData.categories = convertedCategories;
+    return appData;
+  };
+
   var getApps = function(appids) {
     var deferred = $q.defer();
     var newAppids = _.filter(appids, function(appid) {
@@ -37,7 +48,11 @@ angular.module('steamGameMatcherApp')
       $http.get(STORE_API_URL+'?appids='+newAppids.join(','))
       .success(function(data) {
         _.forIn(data, function(app, appid) {
-          appCache[appid].resolve(app.data);
+          var appData = app.data;
+          if (appData) {
+            appData = convertCategories(appData);
+          }
+          appCache[appid].resolve(appData);
         });
 
         resolveApps();
