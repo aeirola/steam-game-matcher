@@ -1,3 +1,5 @@
+require('newrelic');
+
 var static = require('node-static');
   httpProxy = require('http-proxy');
 
