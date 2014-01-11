@@ -16,7 +16,7 @@ require('http').createServer(function (request, response) {
   } else if (request.url.match(/^\/store_api\/.*/)) {
     request.url = request.url.replace('/store_api', '/api');
     proxy.proxyRequest(request, response, {
-      host: 'steamcommunity.com', port: 80
+      host: 'store.steampowered.com', port: 80
     });
   } else if (request.url.match(/^\/id_api\/.*/)) {
     request.url = request.url.replace('/id_api', '');
