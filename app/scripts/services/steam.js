@@ -27,9 +27,9 @@ angular.module('steamGameMatcherApp')
     var deferred = $q.defer();
     var path;
     if (user.match(/^[0-9]{17}$/)) {
-      path = '/profiles/';
+      path = 'profiles/';
     } else {
-      path = '/id/';
+      path = 'id/';
     }
     $http.get(ID_API_URL + path + user + '?xml=1')
     .success(function (dataString) {
