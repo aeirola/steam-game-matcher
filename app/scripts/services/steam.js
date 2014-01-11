@@ -8,9 +8,48 @@ angular.module('steamGameMatcherApp')
   var API_URL='/web_api/IPlayerService/GetOwnedGames/v0001/';
   var ID_API_URL='/id_api/';
   var STORE_API_URL='/store_api/appdetails';
-  var xmlParser = new DOMParser();
 
-  var addGames = function(steamUser) {
+  var xmlParser = new DOMParser();
+  var appCache = {}; // id -> promise
+
+  var getApps = function(appids) {
+    var deferred = $q.defer();
+    var newAppids = _.filter(appids, function(appid) {
+      return !(appid in appCache);
+    });
+
+    _.forEach(newAppids, function(appid) {
+      appCache[appid] = $q.defer();
+    });
+
+    var resolveApps = function() {
+      var returnValue = {};
+      _.forEach(appids, function(appid) {
+        returnValue[appid] = {};
+        appCache[appid].promise.then(function(app) {
+          angular.extend(returnValue[appid], app);
+        });
+      });
+      deferred.resolve(returnValue);
+    };
+
+    if (newAppids) {
+      $http.get(STORE_API_URL+'?appids='+newAppids.join(','))
+      .success(function(data) {
+        _.forIn(data, function(app, appid) {
+          appCache[appid].resolve(app.data);
+        });
+
+        resolveApps();
+      });
+    } else {
+      resolveApps();
+    }
+
+    return deferred.promise;
+  };
+
+  var addApps = function(steamUser) {
     $http.get(API_URL+'?key='+API_KEY+'&steamid='+steamUser.steamId+'&include_appinfo=1&format=json')
     .success(function (data) {
       var gameData = data.response.games;
@@ -18,22 +57,32 @@ angular.module('steamGameMatcherApp')
       _.forEach(gameData, function(game) {
         games[game.appid] = game;
       });
-      expandGameData(games);
+      expandAppData(games);
       steamUser.gameCount = data.response.game_count;
       steamUser.games = games;
     });
   };
 
-  var expandGameData = function(games) {
+  var expandAppData = function(apps) {
     var expand = function(data) {
       for (var appid in data) {
-        angular.extend(games[appid], data[appid].data);
+        angular.extend(apps[appid], data[appid]);
       }
     };
 
-    for (var appid in games) {
-      $http.get(STORE_API_URL+'?appids='+appid).success(expand);
-    }
+    var appidBuffer = [];
+    var flushBuffer = function() {
+      getApps(appidBuffer).then(expand);
+      appidBuffer = [];
+    };
+
+    _.forIn(apps, function(app, appid) {
+      appidBuffer.push(appid);
+      if (appidBuffer.length >= 10) {
+        flushBuffer();
+      }
+    });
+    flushBuffer();
   };
 
   var getSteamId = function(user) {
@@ -65,7 +114,7 @@ angular.module('steamGameMatcherApp')
     // Get id
     getSteamId(userName)
     .then(function(steamUser) {
-      addGames(steamUser);
+      addApps(steamUser);
       deferred.resolve(steamUser);
     });
 
