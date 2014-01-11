@@ -14,7 +14,6 @@ angular.module('steamGameMatcherApp')
 
   var convertCategories = function(appData) {
     var convertedCategories = {};
-    console.log(appData);
     _.forEach(appData.categories, function(category) {
       convertedCategories[category.id] = category;
     });
