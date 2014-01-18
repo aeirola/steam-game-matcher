@@ -1,3 +1,4 @@
+/* jshint camelcase: false */
 'use strict';
 
 angular.module('steamGameMatcherApp')
@@ -32,12 +33,21 @@ angular.module('steamGameMatcherApp')
     };
 
     $scope.$watch('users', function(users) {
-      var gameIds = _.intersection.apply({}, _.map(users, function(user) {
-        return _.map(user.games, 'appid');
-      }));
-      var allGames = {};
-      angular.extend.apply({}, _.union([allGames], _.map(users, 'games')));
-      $scope.games = _.map(gameIds, function(gameId) {return allGames[gameId];});
+      var apps = {};
+      _.forEach(users, function(user) {
+        _.forEach(user.games, function(app) {
+          var appid = app.steam_appid || app.appid;
+          if (apps[appid]) {
+            app = apps[appid];
+          } else {
+            app.owners = {};
+            apps[appid] = app;
+          }
+          app.owners[user.steamId] = user.name;
+          app.missingCopies = Object.keys($scope.users).length - Object.keys(app.owners).length;
+        });
+      });
+      $scope.games = _.toArray(apps);
     }, true);
 
     $scope.appFilter = function(app) {
@@ -66,10 +76,17 @@ angular.module('steamGameMatcherApp')
     };
 
     $scope.appSort = function(app) {
+      var metascore = 50;
+      var price = 0;
       if (app.metacritic) {
-        return app.metacritic.score;
-      } else {
-        return 0;
+        metascore = app.metacritic.score;
       }
+      if (app.price_overview) {
+        price = app.price_overview.final;
+      }
+
+      var cost = app.missingCopies*price || 0.01;
+      var score = metascore/cost;
+      return score;
     };
   });
