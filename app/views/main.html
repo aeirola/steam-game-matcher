@@ -1,18 +1,33 @@
-<textarea ng-model="userInputString"></textarea>
-<button ng-click="search(userInputString)">Search</button>
+<div class="row users">
+	<form role="form ids" class="col-md-6">
+		<div class="form-group">
+			<label><h4>SteamIDs</h4></label>
+			<textarea class="form-control" ng-model="userInputString" cols="20" rows="6"></textarea>
+		</div>
+		<button class="btn btn-default" ng-click="search(userInputString)">Search</button>
+	</form>
 
-<ul>
-	<li ng-repeat="user in users">
-		<a ng-href="http://steamcommunity.com/profiles/{{user.steamId}}">{{user.name}}</a>:
-			{{user.gameCount}} games
-	</li>
-</ul>
+	<div class="col-md-6 profiles">
+		<h4>Steam profiles</h4>
+		<ul>
+			<li ng-repeat="user in users">
+				<a ng-href="http://steamcommunity.com/profiles/{{user.steamId}}">{{user.name}}</a>:
+					{{user.gameCount}} games
+			</li>
+		</ul>
+	</div>
+</div>
 
-<ul>
-	<li ng-repeat="game in games">
-		<img ng-if="game.img_icon_url" ng-src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_icon_url}}.jpg">
-		<a ng-href="http://steamcommunity.com/app/{{game.appid}}">{{game.name}}</a>
-		<span>{{game.metacritic.score}}</span>
-		<span>{{game.categories.1.description}}</span>
-	</li>
-</ul>
+<hr>
+
+<div class="row games">
+	<h4>Games</h4>
+	<ul>
+		<li ng-repeat="game in games">
+			<img ng-if="game.img_icon_url" ng-src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_icon_url}}.jpg">
+			<span>{{game.metacritic.score}}</span>
+			<a ng-href="http://steamcommunity.com/app/{{game.appid}}">{{game.name}}</a>
+			<span>{{game.categories.1.description}}</span>
+		</li>
+	</ul>
+</div>
