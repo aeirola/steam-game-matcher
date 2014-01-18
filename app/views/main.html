@@ -22,12 +22,52 @@
 
 <div class="row games">
 	<h4>Games</h4>
-	<ul>
-		<li ng-repeat="game in games">
-			<img ng-if="game.img_icon_url" ng-src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_icon_url}}.jpg">
-			<span>{{game.metacritic.score}}</span>
-			<a ng-href="http://steamcommunity.com/app/{{game.appid}}">{{game.name}}</a>
-			<span>{{game.categories.1.description}}</span>
-		</li>
-	</ul>
+
+	<div clas="filters row">
+		<div class="col-md-6">
+			<ul class="categories list-inline">
+				<li ng-repeat="category in categories">
+					<label class='checkbox-inline'>
+						<input type="checkbox" ng-model="category.selected">
+						<img ng-src="{{categoriesIconUrl}}{{category.icon}}"
+							title="{{category.name}}">
+					</label>
+				</li>
+			</ul>
+		</div>
+
+		<div class="col-md-6">
+			<ul class="platforms list-inline">
+				<li ng-repeat="platform in platforms">
+					<label class='checkbox-inline'>
+						<input type="checkbox" ng-model="platform.selected">
+						<img ng-src="{{platformsIconUrl}}{{platform.icon}}"
+							title="{{platform.name}}">
+					</label>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="col-md-12">
+		<ul>
+			<li ng-repeat="game in games | filter:appFilter | orderBy:appSort:true">
+				<img ng-if="game.img_icon_url" ng-src="{{appsIconUrl}}{{game.appid}}/{{game.img_icon_url}}.jpg">
+				<span>{{game.metacritic.score}}</span>
+				<a ng-href="http://steamcommunity.com/app/{{game.appid}}">{{game.name}}</a>
+				<span>
+					<span ng-repeat="category in game.categories" ng-if="categories[category.id]">
+						<img ng-src="{{categoriesIconUrl}}{{categories[category.id].icon}}"
+							title="{{categories[category.id].name}}">
+					</span>
+				</span>
+				<span>
+					<span ng-repeat="(platform, available) in game.platforms" ng-if="available">
+						<img ng-src="{{platformsIconUrl}}{{platforms[platform].icon}}"
+							title="{{platforms[platform].name}}">
+					</span>
+				</span>
+			</li>
+		</ul>
+	</div>
 </div>

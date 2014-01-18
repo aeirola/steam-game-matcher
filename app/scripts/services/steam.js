@@ -51,6 +51,9 @@ angular.module('steamGameMatcherApp')
           if (appData) {
             appData = convertCategories(appData);
           }
+          if (!appCache[appid]) {
+            appCache[appid] = $q.defer();
+          }
           appCache[appid].resolve(appData);
         });
 
@@ -80,7 +83,7 @@ angular.module('steamGameMatcherApp')
   var expandAppData = function(apps) {
     var expand = function(data) {
       for (var appid in data) {
-        angular.extend(apps[appid], data[appid]);
+        angular.extend(apps[appid], data[appid], {loaded: true});
       }
     };
 
