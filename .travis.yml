@@ -9,5 +9,5 @@ script:
 deploy:
   provider: heroku
   api_key:
-    secure: LkxQULTyFaql5mq/IM5nsxALWs/j+WUntNEa0+A3zlMq6wE2VnuJevo+13/ETgf+a+JZH+nbaVLrNL5qeoxXcyqdU7meM46qMA7Y6AblUsUeuptRGi+g63+K6UCCeucPdcVR2VclFTd8bG7OXdMceG6hW4nl9c1OrmFfq4c3uZ8=
+    secure: jegYqOOqNBnyMuaC8rEreEuDaudfOtkusvKRL4AM20Z5Z2w6qyPc4AAbMdHgStqKAtfEnVMDZJKth4Fp6HmkdIYuiY7FCDOeJTIBEzGBZeYcX3+pzGkFoYV/a4Rc5DFyiRlRnE45sNX2jeLWIbrUWAazc3AT4OZYx5AkB3Lpz4g=
   skip_cleanup: true
