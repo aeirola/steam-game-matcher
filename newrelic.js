@@ -9,10 +9,6 @@ exports.config = {
    * Array of application names.
    */
   app_name : ['Steam Game Matcher'],
-  /**
-   * Your New Relic license key.
-   */
-  license_key : 'e51977e0b61d6b60b7397e73a68a89c8416faed1',
   logging : {
     /**
      * Level at which to log. 'trace' is most useful to New Relic when diagnosing
