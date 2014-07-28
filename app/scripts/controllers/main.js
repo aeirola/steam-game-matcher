@@ -5,6 +5,7 @@ angular.module('steamGameMatcherApp')
   .controller('MainCtrl', function ($scope, Steam) {
     $scope.userInputString = 'spaceball\nksii';
     $scope.users = {};
+    $scope.invalidUsers = {};
     $scope.games = {};
     $scope.categories = {
       1: {name: 'Multi-player', icon: 'ico_multiPlayer.png', selected: true},
@@ -23,12 +24,16 @@ angular.module('steamGameMatcherApp')
       $scope.users[user.steamId] = user;
     };
 
+    var addInvalidUser = function(user) {
+      $scope.invalidUsers[user.steamId] = user;
+    };
+
     $scope.search = function(userInputString) {
       $scope.users = {};
       var userInputs = userInputString.split('\n');
       for (var i in userInputs) {
         var userInput = userInputs[i];
-        Steam.getSteamUser(userInput).then(addUser);
+        Steam.getSteamUser(userInput).then(addUser, addInvalidUser);
       }
     };
 

@@ -114,12 +114,31 @@ angular.module('steamGameMatcherApp')
     .success(function (dataString) {
       try {
         var xmlDoc = xmlParser.parseFromString(dataString, 'text/xml');
-        deferred.resolve({steamId: xmlDoc.getElementsByTagName('steamID64')[0].childNodes[0].nodeValue,
-                          name: xmlDoc.getElementsByTagName('steamID')[0].childNodes[0].nodeValue});
+
+        if (xmlDoc.getElementsByTagName('privacyState')[0].textContent === 'private') {
+          deferred.reject({
+            steamId: xmlDoc.getElementsByTagName('steamID64')[0].textContent,
+            name: xmlDoc.getElementsByTagName('steamID')[0].textContent,
+            reason: 'Private'
+          });
+        }
+
+        deferred.resolve({steamId: xmlDoc.getElementsByTagName('steamID64')[0].textContent,
+                          name: xmlDoc.getElementsByTagName('steamID')[0].textContent});
       } catch (e) {
-        console.log('Invalid user ' + user);
-        deferred.reject();
+        deferred.reject({
+          steamId: user,
+          name: user,
+          reason: 'Invalid user'
+        });
       }
+    })
+    .error(function() {
+      deferred.reject({
+        steamId: user,
+        name: user,
+        reason: 'Not found'
+      });
     });
 
     return deferred.promise;
@@ -133,7 +152,7 @@ angular.module('steamGameMatcherApp')
     .then(function(steamUser) {
       addApps(steamUser);
       deferred.resolve(steamUser);
-    });
+    }, deferred.reject);
 
     return deferred.promise;
   };

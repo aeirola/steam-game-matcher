@@ -14,6 +14,10 @@
 				<a ng-href="http://steamcommunity.com/profiles/{{user.steamId}}">{{user.name}}</a>:
 					{{user.gameCount}} games
 			</li>
+			<li ng-repeat="user in invalidUsers">
+				<a ng-href="http://steamcommunity.com/profiles/{{user.steamId}}">{{user.name}}</a>:
+					<span class="text-danger">{{user.reason}}</span>
+			</li>
 		</ul>
 	</div>
 </div>
