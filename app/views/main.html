@@ -66,7 +66,7 @@
 		</div>
 
 		<ul>
-			<li ng-repeat="game in games | filter:appFilter | orderBy:appSort:true | limitTo:100"
+			<li ng-repeat="game in games | filter:appFilter | orderBy:'score':true | limitTo:100"
 				class="row">
 				<span class="col-sm-1">
 					<img ng-if="game.img_icon_url"
@@ -79,7 +79,7 @@
 
 				<span class="col-sm-1"
 					ng-class="{'text-success': !game.missingCopies, 'text-warning': game.missingCopies === 1, 'text-danger': game.missingCopies > 1}">
-					{{game.missingCopies}} * {{game.price_overview.final / 100}}
+					{{game.missingCopies}} * {{game.price_overview.final / 100 || '?'}}
 				</span>
 
 				<span class="col-sm-5">

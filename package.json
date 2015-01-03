@@ -1,15 +1,10 @@
 {
   "name": "steamgamematcher",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Axel Eirola <axel.eirola@iki.fi>",
   "repository": {
     "type": "git",
     "url": "https://github.com/aeirola/steam-game-matcher.git"
-  },
-  "dependencies": {
-    "node-static": "~0.7.3",
-    "http-proxy": "~0.10.4",
-    "newrelic": "~1.2.0"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

@@ -7,7 +7,8 @@ before_script:
 script:
 - grunt
 deploy:
-  provider: heroku
+  provider: divshot
   api_key:
-    secure: jegYqOOqNBnyMuaC8rEreEuDaudfOtkusvKRL4AM20Z5Z2w6qyPc4AAbMdHgStqKAtfEnVMDZJKth4Fp6HmkdIYuiY7FCDOeJTIBEzGBZeYcX3+pzGkFoYV/a4Rc5DFyiRlRnE45sNX2jeLWIbrUWAazc3AT4OZYx5AkB3Lpz4g=
+    secure: OO/4W6JV13+QWCDC/L9fFpj7582rkPKW9wLFNJINy1vuAJ9Jyb99zY2WYjamKJaF1G5JkPyT8pA3j2r/fJvuxlMtLSVhr8XOD2s9LvGTdYcThT8Fcky7pfmCHkRxns63lroLf7OCBCnQbgwljCOQA1qDB5FhrwhfepoVKo2tnjY=
+  environment: production
   skip_cleanup: true

@@ -1,0 +1,15 @@
+{
+  "name": "steam-game-matcher",
+  "root": "dist",
+  "proxy": {
+    "web_api": {
+      "origin": "http://api.steampowered.com"
+    },
+    "store_api": {
+      "origin": "http://store.steampowered.com"
+    },
+    "id_api": {
+      "origin": "http://steamcommunity.com"
+    }
+  }
+}

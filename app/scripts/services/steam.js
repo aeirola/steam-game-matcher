@@ -5,9 +5,10 @@ angular.module('steamGameMatcherApp')
 .service('Steam', function Steam($http, $q) {
   // AngularJS will instantiate a singleton by calling "new" on this function
   var API_KEY='5CDDD4FC0E7A510C4480B310391B8D67';
-  var API_URL='/web_api/IPlayerService/GetOwnedGames/v0001/';
-  var ID_API_URL='/id_api/';
-  var STORE_API_URL='/store_api/appdetails';
+  var API_URL='/__/proxy/web_api/IPlayerService/GetOwnedGames/v0001/';
+  var ID_API_URL='/__/proxy/id_api/';
+  var STORE_API_URL='/__/proxy/store_api/api/appdetails';
+  var APP_DATA_FIELDS = ['basic', 'price_overview', 'platforms', 'categories', 'metacritic'];
 
   var xmlParser = new DOMParser();
   var appCache = {}; // id -> promise
@@ -44,7 +45,7 @@ angular.module('steamGameMatcherApp')
     };
 
     if (newAppids) {
-      $http.get(STORE_API_URL+'?appids='+newAppids.join(','))
+      $http.get(STORE_API_URL+'?filters='+APP_DATA_FIELDS.join(',')+'&appids='+newAppids.join(','))
       .success(function(data) {
         _.forIn(data, function(app, appid) {
           var appData = app.data;
@@ -67,6 +68,8 @@ angular.module('steamGameMatcherApp')
   };
 
   var addApps = function(steamUser) {
+    var deferred = $q.defer();
+
     $http.get(API_URL+'?key='+API_KEY+'&steamid='+steamUser.steamId+'&include_appinfo=1&format=json')
     .success(function (data) {
       var gameData = data.response.games;
@@ -77,7 +80,10 @@ angular.module('steamGameMatcherApp')
       expandAppData(games);
       steamUser.gameCount = data.response.game_count;
       steamUser.games = games;
+      deferred.resolve(steamUser);
     });
+
+    return deferred.promise;
   };
 
   var expandAppData = function(apps) {
@@ -89,13 +95,16 @@ angular.module('steamGameMatcherApp')
 
     var appidBuffer = [];
     var flushBuffer = function() {
+      if (appidBuffer.length <= 0) {
+        return;
+      }
       getApps(appidBuffer).then(expand);
       appidBuffer = [];
     };
 
     _.forIn(apps, function(app, appid) {
       appidBuffer.push(appid);
-      if (appidBuffer.length >= 10) {
+      if (appidBuffer.length >= 1) {
         flushBuffer();
       }
     });
@@ -150,8 +159,8 @@ angular.module('steamGameMatcherApp')
     // Get id
     getSteamId(userName)
     .then(function(steamUser) {
-      addApps(steamUser);
-      deferred.resolve(steamUser);
+      addApps(steamUser).then(deferred.resolve, deferred.reject, deferred.notify);
+      deferred.notify(steamUser);
     }, deferred.reject);
 
     return deferred.promise;

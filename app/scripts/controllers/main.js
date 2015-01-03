@@ -22,6 +22,7 @@ angular.module('steamGameMatcherApp')
 
     var addUser = function(user) {
       $scope.users[user.steamId] = user;
+      updateApps();
     };
 
     var addInvalidUser = function(user) {
@@ -33,13 +34,13 @@ angular.module('steamGameMatcherApp')
       var userInputs = userInputString.split('\n');
       for (var i in userInputs) {
         var userInput = userInputs[i];
-        Steam.getSteamUser(userInput).then(addUser, addInvalidUser);
+        Steam.getSteamUser(userInput).then(addUser, addInvalidUser, addUser);
       }
     };
 
-    $scope.$watch('users', function(users) {
+    var updateApps = function() {
       var apps = {};
-      _.forEach(users, function(user) {
+      _.forEach($scope.users, function(user) {
         _.forEach(user.games, function(app) {
           var appid = app.steam_appid || app.appid;
           if (apps[appid]) {
@@ -50,10 +51,11 @@ angular.module('steamGameMatcherApp')
           }
           app.owners[user.steamId] = user.name;
           app.missingCopies = Object.keys($scope.users).length - Object.keys(app.owners).length;
+          app.score = getAppScore(app);
         });
       });
       $scope.games = _.toArray(apps);
-    }, true);
+    };
 
     $scope.appFilter = function(app) {
       if (!app.loaded) {
@@ -80,17 +82,21 @@ angular.module('steamGameMatcherApp')
       return true;
     };
 
-    $scope.appSort = function(app) {
-      var metascore = 50;
-      var price = 0;
+    var getAppScore = function(app) {
+      var metascore, price;
       if (app.metacritic) {
         metascore = app.metacritic.score;
-      }
-      if (app.price_overview) {
-        price = app.price_overview.final;
+      } else {
+        metascore = 50;
       }
 
-      var cost = app.missingCopies*price || 0.01;
+      if (app.price_overview) {
+        price = app.price_overview.final;
+      } else {
+        price = 0.01;
+      }
+
+      var cost = app.missingCopies*price;
       var score = metascore/cost;
       return score;
     };

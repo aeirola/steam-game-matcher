@@ -93,25 +93,25 @@ module.exports = function (grunt) {
           }
         },
         proxies: [{
-          context: '/web_api',
+          context: '/__/proxy/web_api',
           host: 'api.steampowered.com',
           changeOrigin: true,
           rewrite: {
-            '^/web_api': ''
+            '^/__/proxy/web_api': ''
           }
         },{
-          context: '/store_api',
+          context: '/__/proxy/store_api',
           host: 'store.steampowered.com',
           changeOrigin: true,
           rewrite: {
-            '^/store_api': '/api'
+            '^/__/proxy/store_api': ''
           }
         },{
-          context: '/id_api',
+          context: '/__/proxy/id_api',
           host: 'steamcommunity.com',
           changeOrigin: true,
           rewrite: {
-            '^/id_api': ''
+            '^/__/proxy/id_api': ''
           }
         }]
       },

@@ -1,15 +1,15 @@
 A tool for finding games that you and you friends all own.
 
-Try it now at http://steam-game-matcher.herokuapp.com
+Try it now at http://steam-game-matcher.divshot.io
 
 [![Build Status](https://travis-ci.org/aeirola/steam-game-matcher.png?branch=master)](https://travis-ci.org/aeirola/steam-game-matcher)
 
 
 ## TODO
- - Add game meta-data form http://wiki.teamfortress.com/wiki/User:RJackson/StorefrontAPI#appdetails API
- - Add sorting according to metacritic score
- - Add styling
- - Add suggestion of games to buy
+ - Fix game metadata fetching
+  * Ratelimit store API
+  * Scrape HTML pages
+  * Mirror metadata DB
  - Add friend-adding logic
  - Add user searching
 
