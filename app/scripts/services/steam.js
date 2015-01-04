@@ -12,6 +12,7 @@ angular.module('steamGameMatcherApp')
 
   var xmlParser = new DOMParser();
   var appCache = {}; // id -> promise
+  var self = this;
 
   var convertCategories = function(appData) {
     var convertedCategories = {};
@@ -90,6 +91,7 @@ angular.module('steamGameMatcherApp')
     var expand = function(data) {
       for (var appid in data) {
         angular.extend(apps[appid], data[appid], {loaded: true});
+        self.setAppScore(apps[appid]);
       }
     };
 
@@ -151,6 +153,10 @@ angular.module('steamGameMatcherApp')
     });
 
     return deferred.promise;
+  };
+
+  this.setAppScore = function(app) {
+    app.score = 0;
   };
 
   this.getSteamUser = function(userName) {

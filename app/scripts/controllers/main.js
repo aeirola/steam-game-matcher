@@ -32,6 +32,7 @@ angular.module('steamGameMatcherApp')
     $scope.search = function(userInputString) {
       $scope.users = {};
       var userInputs = userInputString.split('\n');
+      Steam.setAppScore = setAppScore;
       for (var i in userInputs) {
         var userInput = userInputs[i];
         Steam.getSteamUser(userInput).then(addUser, addInvalidUser, addUser);
@@ -51,7 +52,7 @@ angular.module('steamGameMatcherApp')
           }
           app.owners[user.steamId] = user.name;
           app.missingCopies = Object.keys($scope.users).length - Object.keys(app.owners).length;
-          app.score = getAppScore(app);
+          setAppScore(app);
         });
       });
       $scope.games = _.toArray(apps);
@@ -82,8 +83,8 @@ angular.module('steamGameMatcherApp')
       return true;
     };
 
-    var getAppScore = function(app) {
-      var metascore, price;
+    var setAppScore = function(app) {
+      var metascore, price, score;
       if (app.metacritic) {
         metascore = app.metacritic.score;
       } else {
@@ -93,11 +94,16 @@ angular.module('steamGameMatcherApp')
       if (app.price_overview) {
         price = app.price_overview.final;
       } else {
-        price = 0.01;
+        price = 0.1;
       }
 
-      var cost = app.missingCopies*price;
-      var score = metascore/cost;
-      return score;
+      if (app.missingCopies <= 0) {
+        score = metascore*100;
+      } else {
+        var cost = app.missingCopies*price;
+        score = metascore/cost;
+      }
+
+      app.score = score;
     };
   });
