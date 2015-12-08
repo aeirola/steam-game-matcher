@@ -7,8 +7,13 @@ before_script:
 script:
 - grunt
 deploy:
-  provider: divshot
+  provider: releases
   api_key:
-    secure: OO/4W6JV13+QWCDC/L9fFpj7582rkPKW9wLFNJINy1vuAJ9Jyb99zY2WYjamKJaF1G5JkPyT8pA3j2r/fJvuxlMtLSVhr8XOD2s9LvGTdYcThT8Fcky7pfmCHkRxns63lroLf7OCBCnQbgwljCOQA1qDB5FhrwhfepoVKo2tnjY=
-  environment: production
+    secure: Z2XfxvejRh4NbsToVq/T7oebQuqAU0VFixAiOqDscTHseCy9H0YAa+zL7dQhxBEkMsq8a7cJIUvBfQoWojzBinLUaHmO3d8cVV5TSHAWNKsDBZxGOsoc2M80iMYoCkV/AQrcJVcfleob4pVkPvDzyY7L/CgyCWNdT3ucUK9wQ60=
+  file:
+    - "dist/**/*"
+  file_glob: true
   skip_cleanup: true
+  on:
+    repo: aeirola/steam-game-matcher
+    tags: true
