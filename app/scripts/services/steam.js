@@ -5,9 +5,9 @@ angular.module('steamGameMatcherApp')
 .service('Steam', function Steam($http, $q) {
   // AngularJS will instantiate a singleton by calling "new" on this function
   var API_KEY='5CDDD4FC0E7A510C4480B310391B8D67';
-  var API_URL='http://crossorigin.me/http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/';
-  var ID_API_URL='http://crossorigin.me/http://steamcommunity.com/';
-  var STORE_API_URL='http://crossorigin.me/http://store.steampowered.com/api/appdetails';
+  var API_URL='//crossorigin.me/http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/';
+  var ID_API_URL='//crossorigin.me/http://steamcommunity.com/';
+  var STORE_API_URL='//crossorigin.me/http://store.steampowered.com/api/appdetails';
   var APP_DATA_FIELDS = ['basic', 'price_overview', 'platforms', 'categories', 'metacritic'];
 
   var xmlParser = new DOMParser();
