@@ -1,6 +1,8 @@
 // Generated on 2014-01-10 using generator-angular 0.7.1
 'use strict';
 
+const sass = require('node-sass');
+
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -181,9 +183,9 @@ module.exports = function (grunt) {
     },
 
     // Automatically inject Bower components into the app
-    'bower-install': {
+    'wiredep': {
       app: {
-        html: '<%= yeoman.app %>/index.html',
+        src: '<%= yeoman.app %>/index.html',
         ignorePath: '<%= yeoman.app %>/'
       }
     },
@@ -191,7 +193,8 @@ module.exports = function (grunt) {
     // Compiles Sass to CSS and generates necessary files if requested
     sass: {
       options: {
-        includePaths: ['<%= yeoman.app %>/bower_components']
+        implementation: sass,
+        includePaths: ['<%= yeoman.app %>/bower_components'],
       },
       dist: {
         options: {
@@ -339,7 +342,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'bower-install',
+      'wiredep',
       'concurrent:server',
       'autoprefixer',
       'configureProxies:livereload',
@@ -364,7 +367,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'bower-install',
+    'wiredep',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',

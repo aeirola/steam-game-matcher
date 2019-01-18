@@ -1,5 +1,6 @@
 sudo: false
 language: node_js
+node_js: 11
 before_script:
 - npm install -g bower grunt-cli
 - bower install
